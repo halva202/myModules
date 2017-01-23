@@ -1,10 +1,10 @@
 <?php 
-$yearSelected=date("Y");
-$monthSelected=date("m");
-$daySelected=date("d");
-// $yearSelected=2017;
-// $monthSelected=2;
-// $daySelected=25;
+// $yearSelected=date("Y");
+// $monthSelected=date("m");
+// $daySelected=date("d");
+$yearSelected=2017;
+$monthSelected=12;
+$daySelected=25;
 
 echo'result holiday - ';
 var_dump(result($yearSelected,$monthSelected,$daySelected));
@@ -32,10 +32,12 @@ function result($yearSelected,$monthSelected,$daySelected){
 function nearest_holiday_dynamic($yearSelected,$monthSelected,$daySelected){
 	$count = 0;
 	$year = $yearSelected;
+	$month = $monthSelected;
+	$day = $daySelected;
 	while($count == 0){
 		$Easter = Easter($year);
 		$dayOfYear_Easter = $Easter['dayOfYear'];
-		$dayOfYear_daySelected = date("z", mktime(0, 0, 0, $monthSelected, $daySelected, $yearSelected));
+		$dayOfYear_daySelected = date("z", mktime(0, 0, 0, $month, $day, $year));
 		$difference_Easter_daySelected = $dayOfYear_daySelected - $dayOfYear_Easter;
 		$select = select($table = 'calendar_dynamic', $conditions = 'difference >= '.$difference_Easter_daySelected.' ORDER BY difference ASC LIMIT 1');
 		
@@ -49,6 +51,8 @@ function nearest_holiday_dynamic($yearSelected,$monthSelected,$daySelected){
 		}
 		
 		$year = $year + 1;
+		$month = 1;
+		$day = 1;
 	}
 	
 	$nearest_holiday_dynamic = [
